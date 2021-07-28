@@ -12,7 +12,7 @@
           <div class="end-node flex">
             <p>开始</p>
           </div>
-          <nodeWrap v-bind="$attrs" :nodeConfig="nodeConfig" :dataFields="dataFields"></nodeWrap>
+          <nodeWrap v-bind="$attrs" :nodeConfig="nodeConfig" :dataFields="dataFields" :isTried="isTried"></nodeWrap>
           <div class="end-node flex">
             <p>结束</p>
           </div>
@@ -91,11 +91,9 @@ export default {
     saveData() {
       this.isTried = true;
       this.tipList = [];
-      console.log('this.tipList',this.tipList);
-      console.log(22,this.nodeConfig);
       this.reErr(this.nodeConfig)
       if (this.tipList.length != 0) {
-        return this.$message.error('数据不完整')
+        return;
       }
       this.workflowSave()
     },

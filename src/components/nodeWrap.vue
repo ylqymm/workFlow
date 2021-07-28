@@ -24,7 +24,7 @@
             <i class="el-icon-arrow-right arrow"></i>
           </div>
           <div class="error_tip" v-if="isTried && nodeConfig.error">
-            <i class="iconfont icon-icon_remind" style="color: rgb(242, 86, 67);"></i>
+            <i class="el-icon-warning" style="color: rgb(242, 86, 67);"></i>
           </div>
         </div>
       </div>
@@ -53,7 +53,7 @@
                     {{ conditionStr(item, index) }}
                   </div>
                   <div class="error_tip" v-if="isTried && item.error">
-                    <i class="iconfont icon-icon_remind" style="color: rgb(242, 86, 67);"></i>
+                    <i class="el-icon-warning" style="color: rgb(242, 86, 67);"></i>
                   </div>
                 </div>
                 <addNode :childNodeP.sync="item.childNode" :tip="'条件'"></addNode>
