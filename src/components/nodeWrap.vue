@@ -162,7 +162,7 @@
                   </el-form>
                 </div>
                 <div v-else>
-                  <p style="margin-bottom:16px">
+                  <p style="margin-bottom:16px;font-size:14px">
                     按组织架构，发起人<span style="color:#4880FF;">向上的各级主管</span>依次抄送
                   </p>
                   <el-radio-group v-model=" approverConfig.nodeUserType.value ">
@@ -193,16 +193,16 @@
             <div v-for="(item, index) in approverConfig.conditionList" :key="index">
               <div class="condition-conent-group">
                 <div class="condition-group-title flex">
-                  <div>条件组</div>
+                  <div class="dang-style">条件组</div>
                   <div>
-                    <i class="remove iconfont icon-icon_viewpicture_delete" @click="removeCondition('group', index)"></i>
+                    <i class="remove el-icon-delete" @click="removeCondition('group', index)"></i>
                   </div>
                 </div>
                 <div class="condition-group-select" v-for="(it, ind) in item.conditionChildrenNodes" :key="ind">
                   <div class="mg-bot-10">
-                    <div v-if="ind === 0" class="flex">
-                      <span>当</span>
-                      <i class="remove iconfont icon-icon_viewpicture_delete" @click=" removeCondition( 'oneCondition', index, ind ) "></i>
+                    <div v-if="ind === 0" class="flex flex-style">
+                      <span class="dang-style">当</span>
+                      <i class="remove el-icon-delete" @click=" removeCondition( 'oneCondition', index, ind ) "></i>
                     </div>
                     <div v-else class="flex">
                       <el-select style="width: 110px;" v-model="it.conditionOperator" placeholder="请选择">
@@ -218,12 +218,12 @@
                         <el-option v-for="item in dataFields" :label="item.name" :value="item.key" :key="item.key"></el-option>
                       </el-select>
                     </el-col>
-                    <el-col :span="4">
+                    <el-col :span="5">
                       <el-select v-model="it.centerFileds" placeholder="请选择">
                         <el-option v-for="item in operatorList" :label="item" :value="item" :key="item"></el-option>
                       </el-select>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :span="10">
                       <el-date-picker v-model="it.rightFileds" v-if="it.leftFiledsType === 'date'" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
                       </el-date-picker>
                       <el-input v-else v-model="it.rightFileds" placeholder="请输入"></el-input>
@@ -237,7 +237,7 @@
                 </div>
               </div>
               <div v-if=" index === 0 && approverConfig.conditionList.length > 1 " class="flex" style="height:54px;padding:0 24px">
-                <el-select style="width: 110px;" v-model="item.conditionGroupOperator" placeholder="请选择">
+                <el-select style="width: 110px;margin-top:7px" v-model="item.conditionGroupOperator" placeholder="请选择">
                   <el-option label="且" :value="'&&'"></el-option>
                   <el-option label="或" :value="'||'"></el-option>
                 </el-select>
@@ -406,7 +406,6 @@ export default {
     },
   },
   async mounted() {
-    console.log(this.nodeConfig);
     if (this.nodeConfig.type == 1) {
       this.nodeConfig.error = this.setApproverStr(this.nodeConfig) == ''
     } else if (this.nodeConfig.type == 2) {
@@ -883,6 +882,13 @@ export default {
     margin-left: 50px !important;
   }
 }
+.flex-style {
+  display: flex;
+  justify-content: space-between;
+}
+.dang-style {
+  font-size: 14px;
+}
 .dialog-style {
   z-index: 99999 !important;
   background: rgba(0, 0, 0, 0.5);
@@ -954,6 +960,9 @@ export default {
         border-top: solid 1px #ebebeb;
         border-bottom: solid 1px #ebebeb;
         margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
 
       .condition-group-select {

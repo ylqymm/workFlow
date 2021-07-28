@@ -1,22 +1,24 @@
 <template>
-  <div class="approval-flow fd-nav-content">
-    <div class="dingflow-design">
-      <div class="zoom flex">
-        <div :class="'zoom-out'+ (nowVal==50?' disabled':'')" @click="zoomSize(1)"></div>
-        <span>{{nowVal}}%</span>
-        <div :class="'zoom-in'+ (nowVal==300?' disabled':'')" @click="zoomSize(2)"></div>
-      </div>
-      <div class="box-scale" id="box-scale" :style="'transform: scale('+nowVal/100+'); transform-origin: 50% 0px 0px;'">
-        <div class="end-node flex">
-          <p>开始</p>
+  <div>
+    <el-button type="primary" class="btn-style" @click="saveData">保存</el-button>
+    <div class="approval-flow fd-nav-content">
+      <div class="dingflow-design">
+        <div class="zoom flex">
+          <div :class="'zoom-out'+ (nowVal==50?' disabled':'')" @click="zoomSize(1)"></div>
+          <span>{{nowVal}}%</span>
+          <div :class="'zoom-in'+ (nowVal==300?' disabled':'')" @click="zoomSize(2)"></div>
         </div>
-        <nodeWrap v-bind="$attrs" :nodeConfig="nodeConfig"></nodeWrap>
-        <div class="end-node flex">
-          <p>结束</p>
+        <div class="box-scale" id="box-scale" :style="'transform: scale('+nowVal/100+'); transform-origin: 50% 0px 0px;'">
+          <div class="end-node flex">
+            <p>开始</p>
+          </div>
+          <nodeWrap v-bind="$attrs" :nodeConfig="nodeConfig" :dataFields="dataFields"></nodeWrap>
+          <div class="end-node flex">
+            <p>结束</p>
+          </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -30,9 +32,7 @@ export default {
     return {
       //流程设置
       isTried: false,
-      // nodeConfig: {
-      //   childNode: {},
-      // },
+      tipList: [],
       nodeConfig: {
         error: true,
         childNode: {
@@ -49,6 +49,11 @@ export default {
           nodeId: "sid-cd8c9325-fd69-4a4e-ba77-256d3fa49032"
         }
       },
+      dataFields: [
+        { name: "日期", key: "date", type: "date" },
+        { name: "地址", key: "adress" },
+        { name: "状态", key: "state" }
+      ],
       nowVal: 100,
       flowPermission: [],
       tableId: "",
@@ -82,6 +87,62 @@ export default {
 
   },
   methods: {
+    // 保存
+    saveData() {
+      this.isTried = true;
+      this.tipList = [];
+      console.log('this.tipList',this.tipList);
+      console.log(22,this.nodeConfig);
+      this.reErr(this.nodeConfig)
+      if (this.tipList.length != 0) {
+        return this.$message.error('数据不完整')
+      }
+      this.workflowSave()
+    },
+    reErr(data) {
+      if (data.childNode) {
+        if (data.childNode.type == 1) {
+          //审批人
+          if (data.childNode.error) {
+            this.tipList.push({
+              name: data.childNode.nodeName,
+              type: '审核人',
+            })
+          }
+          this.reErr(data.childNode)
+        } else if (data.childNode.type == 2) {
+          if (data.childNode.error) {
+            this.tipList.push({
+              name: data.childNode.nodeName,
+              type: '抄送人',
+            })
+          }
+          this.reErr(data.childNode)
+        } else if (data.childNode.type == 3) {
+          this.reErr(data.childNode.childNode)
+        } else if (data.childNode.type == 4) {
+          this.reErr(data.childNode)
+          for (
+            var i = 0; i < data.childNode.conditionNodes.length; i++
+          ) {
+            if (data.childNode.conditionNodes[i].error) {
+              this.tipList.push({
+                name: data.childNode.conditionNodes[i].nodeName,
+                type: '条件',
+              })
+            }
+            this.reErr(data.childNode.conditionNodes[i])
+          }
+        }
+      } else {
+        data.childNode = null
+      }
+    },
+    workflowSave() {
+      // 调接口存数据
+      console.log('this.nodeConfig', this.nodeConfig);
+      this.$message.success('保存成功')
+    },
     zoomSize(type) {
       if (type == 1) {
         if (this.nowVal == 50) {
@@ -100,6 +161,10 @@ export default {
 </script>
 
 <style lang="less">
+.btn-style {
+  position: fixed;
+  right: 60px;
+}
 .approval-flow {
   .dingflow-design {
     .zoom {
@@ -148,6 +213,7 @@ export default {
       left: 40%;
       .branch-wrap {
         .branch-box-wrap {
+          margin-left: -240px;
           .auto-judge {
             position: relative;
             width: 280px;
@@ -163,7 +229,7 @@ export default {
               text-align: left;
               height: 38px;
               line-height: 38px;
-              padding: 0 13px 0 18px;
+              padding: 0 13px 0 0px;
               border-bottom: 1px solid #ebebeb;
             }
           }
@@ -235,8 +301,7 @@ export default {
   right: 0;
   top: 0;
 }
-.editable-title{
-  color: #fff;
+.editable-title {
   font-size: 14px;
   padding-left: 18px;
 }
@@ -491,6 +556,7 @@ export default {
   padding: 0 18px;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 14px;
 }
 
 .dingflow-design .auto-judge .sort-left,
@@ -500,11 +566,13 @@ export default {
   bottom: 0;
   display: none;
   z-index: 1;
+  color: rgba(0, 0, 0, 0.25);
 }
 
 .dingflow-design .auto-judge .sort-left {
   left: 4px;
   top: 33px;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .dingflow-design .auto-judge .sort-right {

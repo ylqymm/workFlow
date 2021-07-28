@@ -5,19 +5,19 @@
         <div class="add-node-popover-body">
           <div class="add-node-popover-item approver" @click="addType(1)">
             <div class="item-wrapper">
-              <i class="iconfont icon-icon_add_person-01"></i>
+              <img src="../assets/img/审批人.png" alt="" class="img-style">
             </div>
             <p>审批人</p>
           </div>
           <div class="add-node-popover-item notifier" @click="addType(2)">
             <div class="item-wrapper">
-              <i class="iconfont icon-icon_duplicate-01"></i>
+              <img src="../assets/img/抄送人.png" alt="" class="img-style">
             </div>
             <p>抄送人</p>
           </div>
           <div class="add-node-popover-item condition" @click="addType(4)">
             <div class="item-wrapper">
-              <i class="iconfont icon-icon_add_branch-01"></i>
+              <img src="../assets/img/条件.png" alt="" class="img-style">
             </div>
             <p>条件分支</p>
           </div>
@@ -112,7 +112,7 @@ export default {
   &:before {
     content: "";
     position: absolute;
-    top: -23px;
+    top: 1px;
     left: 0px;
     right: 0;
     bottom: 0;
@@ -122,6 +122,9 @@ export default {
     // height: 100%;
     background-color: #ebebeb;
   }
+}
+.img-style{
+  width: 36px;
 }
 .add-node-popover {
   padding: 14px 26px;
