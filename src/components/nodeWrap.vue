@@ -756,10 +756,7 @@ export default {
             this.nodeConfig.conditionNodes[0].childNode = this.nodeConfig.childNode
           }
         }
-        this.$emit(
-          'update:nodeConfig',
-          this.nodeConfig.conditionNodes[0].childNode
-        )
+        this.$emit('update:nodeConfig', this.nodeConfig.conditionNodes[0].childNode)
       }
     },
     reData(data, addData) {

@@ -46,7 +46,7 @@ export default {
           examineMode: "1",
           error: false,
           type: 1,
-          nodeId: "sid-cd8c9325-fd69-4a4e-ba77-256d3fa49032"
+          nodeId: "approvalID"
         }
       },
       dataFields: [
@@ -136,9 +136,18 @@ export default {
         data.childNode = null
       }
     },
+    // 给数据加preId(递归)
+    handleData(data) {
+      if (data.childNode) {
+        data.childNode.preId = data.nodeId;
+        this.handleData(data.childNode);
+      }
+      return data;
+    },
     workflowSave() {
       // 调接口存数据
-      console.log('this.nodeConfig', this.nodeConfig);
+      let data = this.handleData(this.nodeConfig);
+      console.log('data', data);
       this.$message.success('保存成功')
     },
     zoomSize(type) {

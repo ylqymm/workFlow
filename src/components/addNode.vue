@@ -48,6 +48,7 @@ export default {
             nodeName: "审核人",
             error: true,
             type: 1,
+            nodeId: "approvalID",
             examineMode: "1",
             nodeUserType: {
               type: 'manager',
@@ -62,6 +63,7 @@ export default {
             nodeName: "抄送人",
             error: true,
             type: 2,
+            nodeId: "copyID",
             nodeUserType: {
               type: 'manager',
               value: 'm-1',
@@ -76,6 +78,7 @@ export default {
         data = {
           nodeName: "路由",
           type: 4,
+          nodeId: "conditionID",
           childNode: this.childNodeP,
           conditionNodes: [{
             nodeName: "条件1",
@@ -106,8 +109,8 @@ export default {
   display: inline-flex;
   flex-shrink: 0;
   position: relative;
-  &:first-child{
-      margin-left: 16px;
+  &:first-child {
+    margin-left: 16px;
   }
   &:before {
     content: "";
@@ -123,7 +126,7 @@ export default {
     background-color: #ebebeb;
   }
 }
-.img-style{
+.img-style {
   width: 36px;
 }
 .add-node-popover {
